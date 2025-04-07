@@ -1,0 +1,19 @@
+BUCKET='tweeter-devin'
+LAMBDA_ROLE='arn:aws:iam::061039782038:role/deploy-role'
+EDIT_LAMBDALIST='
+tweeterGetFollowees | lambda/follow/GetFolloweesLambda.handler
+tweeterGetFollowers | lambda/follow/GetFollowersLambda.handler
+tweeterGetFolloweesCount | lambda/follow/GetFolloweesCountLambda.handler
+tweeterGetFollowersCount | lambda/follow/GetFollowersCountLambda.handler
+tweeterGetIsFollowerStatus | lambda/follow/GetIsFollowerStatusLambda.handler
+tweeterFollow | lambda/follow/FollowLambda.handler
+tweeterUnfollow | lambda/follow/UnfollowLambda.handler
+tweeterGetStories | lambda/status/GetStoriesLambda.handler
+tweeterGetFeed | lambda/status/GetFeedLambda.handler
+tweeterPostStatus | lambda/status/PostStatusLambda.handler
+tweeterLogout | lambda/user/LogoutLambda.handler
+tweeterGetUser | lambda/user/GetUserLambda.handler
+tweeterLogin | lambda/user/LoginLambda.handler
+tweeterRegister | lambda/user/RegisterLambda.handler
+'
+# LAMBDALAYER_ARN='arn:aws:lambda:us-west-2:061039782038:layer:tweeter-lambda-layer:4'

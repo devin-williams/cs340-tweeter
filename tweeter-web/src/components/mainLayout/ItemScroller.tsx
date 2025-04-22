@@ -40,15 +40,33 @@ const ItemScroller = <T, U>(props: Props<T, U>) => {
   //   }
   // }, [newItems]);
 
+  // useEffect(() => {
+  //   if (newItems.length > 0) {
+  //     setItems((prevItems) => {
+  //       const existing = new Set(prevItems.map((item: any) => item.timestamp));
+  //       const filtered = newItems.filter((item: any) => !existing.has(item.timestamp));
+  //       return [...prevItems, ...filtered];
+  //     });
+  //   }
+  // }, [newItems]);
+
   useEffect(() => {
     if (newItems.length > 0) {
       setItems((prevItems) => {
-        const existing = new Set(prevItems.map((item: any) => item.timestamp));
-        const filtered = newItems.filter((item: any) => !existing.has(item.timestamp));
+        const existingKeys = new Set(
+          prevItems.map((item: any) => `${item.alias ?? item.user.alias}:${item.timestamp}`)
+        );
+  
+        const filtered = newItems.filter((item: any) => {
+          const key = `${item.alias ?? item.user.alias}:${item.timestamp}`;
+          return !existingKeys.has(key);
+        });
+  
         return [...prevItems, ...filtered];
       });
     }
   }, [newItems]);
+  
   
 
   const reset = async () => {
@@ -67,7 +85,7 @@ const ItemScroller = <T, U>(props: Props<T, U>) => {
   const [presenter] = useState(props.presenterGenerator(listener));
 
   const loadMoreItems = async () => {
-    presenter.loadMoreItems(authToken!, displayedUser!.alias);
+    await presenter.loadMoreItems(authToken!, displayedUser!.alias);
     setChangedDisplayedUser(false);
   };
 

@@ -6,13 +6,13 @@ describe("StatusService Integration Tests", () => {
   const statusService = new StatusService();
 
   let authToken: AuthToken;
-  const userAlias = "@testuser";
+  const userAlias = "@daisy";
 
   beforeAll(async () => {
     // Simulate user login to get an auth token
     const [user, token] = await statusService["serverFacade"].login({
       alias: userAlias,
-      password: "password123",
+      password: "password",
     });
     authToken = token;
   });

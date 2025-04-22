@@ -39,6 +39,12 @@ export class DynamoSessionDAO implements ISessionDAO {
       })
     );
 
+    const isValid = !!result.Item && result.Item.expiresAt > Math.floor(Date.now() / 1000);
+
+    if (!isValid) {
+      throw new Error("[Bad Request] Invalid token.");
+    }
+
     return !!result.Item;
   }
 

@@ -1,7 +1,7 @@
 import { UserDto } from "tweeter-shared";
 
 export interface IUserDAO {
-  getUser(token: string, alias: string): Promise<UserDto | null>;
+  getUser(alias: string): Promise<UserDto | null>;
   login(alias: string, password: string): Promise<[UserDto, string]>;
   register(
     firstName: string,

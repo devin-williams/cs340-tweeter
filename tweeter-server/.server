@@ -15,5 +15,7 @@ tweeterLogout | lambda/user/LogoutLambda.handler
 tweeterGetUser | lambda/user/GetUserLambda.handler
 tweeterLogin | lambda/user/LoginLambda.handler
 tweeterRegister | lambda/user/RegisterLambda.handler
+tweeterFanOut | lambda/status/FanOutDispatcherLambda.handler
+tweeterFeedWrite | lambda/status/FeedWriteLambda.handler
 '
 # LAMBDALAYER_ARN='arn:aws:lambda:us-west-2:061039782038:layer:tweeter-lambda-layer:4'

@@ -26,12 +26,8 @@ export class DynamoUserDAO implements IUserDAO {
     this.sessionDAO = DAOFactory.getSessionDAO();
   }
 
-  async getUser(token: string, alias: string): Promise<UserDto | null> {
-    const isValid = await this.sessionDAO.isTokenValid(token);
-    if (!isValid) {
-      throw new Error("[Bad Request] Invalid token.");
-    }
-
+  async getUser(alias: string): Promise<UserDto | null> {
+    
     alias = this.extractAlias(alias);
 
     const result = await this.docClient.send(
@@ -106,12 +102,17 @@ export class DynamoUserDAO implements IUserDAO {
     const fileName = `${alias}_profile_pic${imageFileExtension}`;
     const imageUrl = await this.s3DAO.putImage(fileName, userImageBytes);
 
+    const followerCount = 0;
+    const followeeCount = 0;
+
     const newItem = {
       alias,
       firstName,
       lastName,
       password: hashedPassword,
       imageUrl,
+      followerCount,
+      followeeCount,
     };
 
     await this.docClient.send(

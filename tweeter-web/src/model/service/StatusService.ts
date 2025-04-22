@@ -40,13 +40,14 @@ export class StatusService {
   public async postStatus(
     authToken: AuthToken,
     newStatus: Status
-  ): Promise<void> {
+  ): Promise<string> {
     const request: PostStatusRequest = {
       token: authToken.token,
       newStatus: newStatus.dto,
       segments: newStatus.segments.map((segment) => segment.dto),
     };
 
-    return this.serverFacade.postStatus(request);
+    await this.serverFacade.postStatus(request);
+    return "Status Posted!";
   }
 }

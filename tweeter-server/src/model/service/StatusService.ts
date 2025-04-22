@@ -1,11 +1,14 @@
-import { AuthToken, Status, FakeData, StatusDto } from "tweeter-shared";
+import { StatusDto } from "tweeter-shared";
 import { IStatusDAO } from "../../dao-interface/IStatusDAO";
 import { DAOFactory } from "../../DAOFactory/DAOFactory";
+import { ISessionDAO } from "../../dao-interface/ISessionDAO";
 
 export class StatusService {
   private statusDAO: IStatusDAO;
+  private sessionDAO: ISessionDAO;
   constructor() {
     this.statusDAO = DAOFactory.getStatusDAO();
+    this.sessionDAO = DAOFactory.getSessionDAO();
   }
   public async loadMoreStoryItems(
     token: string,
@@ -15,8 +18,9 @@ export class StatusService {
   ): Promise<[StatusDto[], boolean]> {
     // TODO: Replace with the result of calling server
     // return this.getFakeData(lastItem, pageSize, userAlias);
+    await this.sessionDAO.isTokenValid(token);
+
     return this.statusDAO.loadMoreStoryItems(
-      token,
       userAlias,
       pageSize,
       lastItem
@@ -29,10 +33,8 @@ export class StatusService {
     pageSize: number,
     lastItem: StatusDto | null
   ): Promise<[StatusDto[], boolean]> {
-    // TODO: Replace with the result of calling server
-    // return this.getFakeData(lastItem, pageSize, userAlias);
+    await this.sessionDAO.isTokenValid(token);
     return this.statusDAO.loadMoreFeedItems(
-      token,
       userAlias,
       pageSize,
       lastItem
@@ -43,23 +45,8 @@ export class StatusService {
     token: string,
     newStatus: StatusDto
   ): Promise<void> {
-    // Pause so we can see the logging out message. Remove when connected to the server
-    // await new Promise((f) => setTimeout(f, 2000));
-
-    // TODO: Call the server to post the status
-    return this.statusDAO.postStatus(token, newStatus);
-  }
-
-  private async getFakeData(
-    lastItem: StatusDto | null,
-    pageSize: number,
-    userAlias: string
-  ): Promise<[StatusDto[], boolean]> {
-    const [items, hasMore] = FakeData.instance.getPageOfStatuses(
-      lastItem ? Status.fromDto(lastItem) : null,
-      pageSize
-    );
-    const dtos = items.map((status) => status.dto);
-    return [dtos, hasMore];
+    await this.sessionDAO.isTokenValid(token);
+    const alias = await this.sessionDAO.getAliasForToken(token);
+    return this.statusDAO.postStatus(alias, newStatus);
   }
 }
